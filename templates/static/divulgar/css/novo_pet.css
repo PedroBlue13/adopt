@@ -1,0 +1,67 @@
+/* Sidebar */
+.sidebar {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Wrapper */
+.wrapper {
+    margin-top: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Garante que a área centralizada ocupe a maior parte da tela */
+}
+
+/* Box */
+.box {
+    padding: 20px;
+    width: 45vw; /* Um pouco menor para se ajustar melhor em telas médias */
+    background: #eeeeee;
+    border-radius: 8px; /* Adiciona cantos arredondados para um visual mais suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais suave e menos intensa */
+    transition: transform 0.2s, box-shadow 0.2s; /* Adiciona uma transição suave */
+}
+
+.box:hover {
+    transform: translateY(-5px); /* Elevação leve ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra mais intensa ao passar o mouse */
+}
+
+/* Fonte Vinho */
+.font-vinho {
+    color: #A24D52;
+    font-weight: bold; /* Deixa o texto mais destacado */
+    font-size: 1.5rem; /* Aumenta um pouco o tamanho da fonte */
+    text-transform: uppercase; /* Transforma o texto em maiúsculas */
+}
+.custom-file-input {
+    position: relative;
+    width: 100%;
+}
+
+.custom-file-input input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.custom-file-input label {
+    display: block;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    text-align: center;
+    color: #6c757d;
+    cursor: pointer;
+}
+
+.custom-file-input input[type="file"]:focus + label {
+    border-color: #80bdff;
+    outline: none;
+}

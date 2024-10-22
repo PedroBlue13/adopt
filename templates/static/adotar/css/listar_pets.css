@@ -1,0 +1,55 @@
+width80{
+    width: 80vw;
+    }
+    .tabela{
+    width: 100%;
+    margin-top: 20px;
+    }
+    .tabela-linha{
+    background-color: #e8e7e7;
+    }
+    /* Tabela */
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+}
+
+.tabela th {
+    background-color: #A24D52;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 15px;
+    text-align: left;
+}
+
+.tabela td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabela-linha:hover {
+    background-color: #f9f9f9;
+}
+
+.tabela img {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão Remover */
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    text-decoration: none;
+}
