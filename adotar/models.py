@@ -1,8 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
-
-# Create your models here.
-=======
 from divulgar.models import Pet
 from django.contrib.auth.models import User
 
@@ -19,4 +15,4 @@ class PedidoAdocao(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     data = models.DateField()
     status = models.CharField(max_length=2, choices=choices_status, default='AG')
->>>>>>> f2a86fb (page see pet, bug fix database)
+
