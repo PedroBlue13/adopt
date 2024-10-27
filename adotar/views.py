@@ -6,9 +6,11 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .models import PedidoAdocao
 from divulgar.models import Pet, Raca
-from .models import PedidoAdocao
+from adotar.models import PedidoAdocao
+from django.core.mail import send_mail
 
 # Create your views here.
+
 
 
 
@@ -34,7 +36,7 @@ def listar_pets(request):
 
 @login_required
 def pedido_adocao(request, id_pet):
-    pet = Pet.objects.filter(id=id_pet, status="P").first()
+    pet = Pet.objects.filter(id=id_pet, status="p").first()
     
     if not pet:
         messages.add_message(request, constants.ERROR, 'Esse pet já foi adotado :)')
@@ -46,3 +48,25 @@ def pedido_adocao(request, id_pet):
     messages.add_message(request, constants.SUCCESS, 'Pedido de adoção realizado, você receberá um e-mail caso ele seja aprovado.')
     return redirect('/adotar')
 
+
+
+
+def processa_pedido_adocao(request, id_pedido):
+    status = request.GET.get('status')
+    pedido = PedidoAdocao.objects.get(id=id_pedido)
+    if status == "A":
+        pedido.status = 'AP'
+        string = '''Olá, sua adoção foi aprovada. ...'''
+    elif status == "R":
+        string = '''Olá, sua adoção foi recusada. ...'''
+        pedido.status = 'R'
+    pedido.save()
+    print(pedido.usuario.email)
+    email = send_mail(
+        'Sua adoção foi processada',
+        string,
+        'caio@pythonando.com.br',
+        [pedido.usuario.email,],
+    )
+    messages.add_message(request, constants.SUCCESS, 'Pedido de adoção processado com sucesso')
+    return redirect('/divulgar/ver_pedido_adocao')

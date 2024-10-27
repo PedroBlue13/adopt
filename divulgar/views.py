@@ -1,12 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Tag, Raca, Pet
 from django.contrib import messages
 from django.contrib.messages import constants
 from django.contrib.messages import constants
 from django.shortcuts import redirect
-
+from adotar.models import PedidoAdocao
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def novo_pet(request):
@@ -65,4 +66,48 @@ def ver_pet(request, id):
     if request.method == "GET" :
         pet = Pet.objects.get(id=id)
         return render(request, 'ver_pet.html', {'pet': pet})
+        
 
+def ver_pedido_adocao(request):
+    if request.method == "GET":
+        pedidos = PedidoAdocao.objects.filter(usuario=request.user).filter(status='AG')
+        return render(request, 'ver_pedido_adocao.html', {'pedidos': pedidos})
+
+
+def dashboard(request):
+    if request.method == "GET":
+        pets = Pet.objects.filter(usuario=request.user)
+        return render(request, 'dashboard.html', {'pets': pets})
+
+@csrf_exempt
+def api_adocoes_por_raca(request):
+    racas = Raca.objects.all()  
+
+    qtd_adocoes = []
+    for raca in racas:
+        adocoes = PedidoAdocao.objects.filter(pet__raca=raca).filter(status="AP").count()
+        qtd_adocoes.append(adocoes)
+
+    racas = [raca.raca for raca in racas]
+    data = {'qtd_adocoes': qtd_adocoes,
+            'labels': racas}
+    
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def api_adocoes_por_solicitadas(request):
+    racas = Raca.objects.all()  
+
+    qtd_solicitadas = []
+    for raca in racas:
+        solicitadas = PedidoAdocao.objects.filter(pet__raca=raca).count()
+        qtd_solicitadas.append(solicitadas)
+
+    racas_labels = [raca.raca for raca in racas]  # Converte para lista simples
+    data = {
+        'qtd_solicitadas': qtd_solicitadas,
+        'labels': racas_labels
+    }
+    
+    return JsonResponse(data)

@@ -45,39 +45,42 @@
                                 
                                 <div class="custom-file-input">
                                     <label for="foto" id="file-label">Selecione uma foto do Gatinho...</label>
-                                    <input type="file" name="foto" id="foto" class="form-control" onchange="showFileName()">
+                                    <input type="file" name="foto" id="foto" class="form-control" onchange="showFileName()" required>
                                 </div>
                                 <br>
                                 <label for="nome">Nome:</label>
-                                <input type="text" id="nome" class="form-control" name="nome" placeholder="Digite o nome do pet...">
+                                <input type="text" id="nome" class="form-control" name="nome" placeholder="Digite o nome do pet..." required>
                                 <br>
                                 <label for="descricao">Descrição:</label>
-                                <textarea id="descricao" class="form-control" name="descricao" placeholder="Descrição..."></textarea>
+                                <textarea id="descricao" class="form-control" name="descricao" placeholder="Descrição..." required></textarea>
                                 <br>
                                 
                                 <div class="row">
                                     <div class="col-md">
                                         <label for="Bairro">Bairro:</label>
-                                        <input type="text" id="Bairro" placeholder="Digite o Bairro do pet..." name="Bairro" class="form-control">
+                                        <input type="text" id="Bairro" placeholder="Digite o Bairro do pet..." name="Bairro" class="form-control" required>
                                     </div>
                                 </div>
                                 <br>
                                 
                                 <label for="telefone">Telefone para contato:</label>
-                                <input type="text" id="telefone" placeholder="Digite o seu telefone..." name="telefone" class="form-control">
+                                <input type="text" id="telefone" placeholder="Digite o seu telefone..." name="telefone" class="form-control" required>
                                 <br>
                              
                                 <label for="tags">Tags:</label>
                               
-                                <select id="tags" name="tags" multiple class="form-select">
+                                <div id="tags" class="form-check">
                                     {% for tag in tags %}
-                                  <option value="{{tag.id}}">{{tag}}</option>  
-                                    {%endfor%}
-                                </select>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="tag_{{ tag.id }}" name="tags" value="{{ tag.id }}" class="form-check-input">
+                                            <label for="tag_{{ tag.id }}" class="form-check-label">{{ tag }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                                 <br>
                                 
                                 <label for="raca">Raça:</label>
-                                <select id="raca" name="raca"  class="form-select">
+                                <select id="raca" name="raca"  class="form-select" required>
                                     {% for raca in racas %}
                                   <option value="{{raca.id}}">{{raca}}</option>  
                                     {%endfor%}
