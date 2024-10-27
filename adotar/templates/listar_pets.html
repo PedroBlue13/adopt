@@ -15,8 +15,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 bg-side sidebar">
+<<<<<<< HEAD
                 <h2>ADO.TE</h2>
                 <hr>
+=======
+                <h2 style="color: aliceblue;">ADO.TE</h2>
+                <hr style="color: aliceblue;">
+>>>>>>> f2a86fb (page see pet, bug fix database)
                 <nav class="nav flex-column">
                     <a href="{% url 'listar_pets' %}" class="nav-link btn btn-outline-primary my-2"style="color: white; border: 1px solid white;">Listar Pets</a>
                     <a href="{% url 'novo_pet' %}" class="nav-link btn btn-outline-primary my-2"style="color: white; border: 1px solid white;">Novo Pet</a>
@@ -72,7 +77,11 @@
                             {% for pet in pets %}
                             <tr class="tabela-linha">
                                 <td width="20%">
+<<<<<<< HEAD
                                     <a href=""><img width="40%" src="{{ pet.foto.url }}" alt="Foto do pet"></a>
+=======
+                                    <a href="{% url 'ver_pet' pet.id %}"><img width="40%" src="{{ pet.foto.url }}" alt="Foto do pet"></a>
+>>>>>>> f2a86fb (page see pet, bug fix database)
                                 </td>
                                 <td>{{ pet.nome }}</td>
                                 <td>{{ pet.raca }}</td>
@@ -83,7 +92,11 @@
                                         <span class="badge text-bg-success">Adotado</span>
                                     {% endif %}
                                 </td>
+<<<<<<< HEAD
                                 <td>{{ pet.cidade }}</td>
+=======
+                                <td>{{ pet.bairro }}</td>
+>>>>>>> f2a86fb (page see pet, bug fix database)
                             </tr>
                             {% endfor %}
                         </table>
