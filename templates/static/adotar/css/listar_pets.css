@@ -1,14 +1,16 @@
-width80{
-    width: 80vw;
-    }
-    .tabela{
-    width: 100%;
-    margin-top: 20px;
-    }
-    .tabela-linha{
-    background-color: #e8e7e7;
-    }
-    /* Tabela */
+/* Classe para largura */
+.width80 {
+    width: 70vw; /* Aumenta a largura para 90% da viewport */
+    max-width: 1200px; /* Limita o crescimento em telas grandes */
+    margin: 0 auto; /* Centraliza o conteúdo */
+    padding: 20px; /* Adiciona espaçamento interno */
+}
+
+.box {
+    padding: 20px; /* Ajusta o padding interno do .box */
+}
+
+/* Tabela */
 .tabela {
     width: 100%;
     border-collapse: collapse;
@@ -29,6 +31,11 @@ width80{
     border-bottom: 1px solid #ddd;
 }
 
+.tabela-linha {
+    background-color: #e8e7e7;
+}
+
+/* Efeito hover na linha da tabela */
 .tabela-linha:hover {
     background-color: #f9f9f9;
 }

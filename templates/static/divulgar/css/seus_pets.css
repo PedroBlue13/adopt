@@ -1,14 +1,18 @@
-width80{
+/* Classe para largura */
+.width80 {
     width: 80vw;
-    }
-    .tabela{
-    width: 100%;
-    margin-top: 20px;
-    }
-    .tabela-linha{
-    background-color: #e8e7e7;
-    }
-    /* Tabela */
+    max-width: 1000px; /* Limita a largura máxima */
+    margin: 0 auto; /* Centraliza o conteúdo */
+}
+
+/* Garantir que .box não seja afetada ao passar o mouse */
+.box {
+    padding: 20px;
+    /* Remova qualquer transição */
+    transition: none;
+}
+
+/* Tabela */
 .tabela {
     width: 100%;
     border-collapse: collapse;
@@ -29,8 +33,13 @@ width80{
     border-bottom: 1px solid #ddd;
 }
 
+.tabela-linha {
+    background-color: #e8e7e7;
+}
+
+/* Remover efeito hover na linha da tabela */
 .tabela-linha:hover {
-    background-color: #f9f9f9;
+    background-color: #e8e7e7; /* Mantém a cor original */
 }
 
 .tabela img {
@@ -46,10 +55,9 @@ width80{
     padding: 8px 12px;
     border-radius: 5px;
     text-decoration: none;
-    transition: background-color 0.2s;
 }
 
 .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #dc3545; /* Mantém a cor original no hover */
     text-decoration: none;
 }

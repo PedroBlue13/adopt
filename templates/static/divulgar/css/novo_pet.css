@@ -2,12 +2,9 @@
 .sidebar {
     text-align: center;
     padding: 20px;
-<<<<<<< HEAD
-=======
     background: #A24D52;
     color: #333;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
->>>>>>> f2a86fb (page see pet, bug fix database)
 }
 
 /* Wrapper */
@@ -16,29 +13,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-<<<<<<< HEAD
-    min-height: 80vh; /* Garante que a área centralizada ocupe a maior parte da tela */
-=======
     min-height: 80vh;
     padding: 10px;
->>>>>>> f2a86fb (page see pet, bug fix database)
 }
 
 /* Box */
 .box {
     padding: 20px;
-<<<<<<< HEAD
-    width: 45vw; /* Um pouco menor para se ajustar melhor em telas médias */
-    background: #eeeeee;
-    border-radius: 8px; /* Adiciona cantos arredondados para um visual mais suave */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais suave e menos intensa */
-    transition: transform 0.2s, box-shadow 0.2s; /* Adiciona uma transição suave */
-}
-
-.box:hover {
-    transform: translateY(-5px); /* Elevação leve ao passar o mouse */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra mais intensa ao passar o mouse */
-=======
     width: 90%; /* Full width on small screens */
     max-width: 600px; /* Fixed max width for larger screens */
     background: #eeeeee;
@@ -50,21 +31,11 @@
 .box:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
->>>>>>> f2a86fb (page see pet, bug fix database)
 }
 
 /* Fonte Vinho */
 .font-vinho {
     color: #A24D52;
-<<<<<<< HEAD
-    font-weight: bold; /* Deixa o texto mais destacado */
-    font-size: 1.5rem; /* Aumenta um pouco o tamanho da fonte */
-    text-transform: uppercase; /* Transforma o texto em maiúsculas */
-}
-.custom-file-input {
-    position: relative;
-    width: 100%;
-=======
     font-weight: bold;
     font-size: 1.6rem;
     text-transform: uppercase;
@@ -76,7 +47,6 @@
     width: 100%;
     display: flex;
     align-items: center;
->>>>>>> f2a86fb (page see pet, bug fix database)
 }
 
 .custom-file-input input[type="file"] {
@@ -91,15 +61,6 @@
 
 .custom-file-input label {
     display: block;
-<<<<<<< HEAD
-    padding: 10px;
-    background: #fff;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    text-align: center;
-    color: #6c757d;
-    cursor: pointer;
-=======
     width: 100%;
     padding: 12px;
     background: #fff;
@@ -110,15 +71,11 @@
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s;
->>>>>>> f2a86fb (page see pet, bug fix database)
 }
 
 .custom-file-input input[type="file"]:focus + label {
     border-color: #80bdff;
     outline: none;
-<<<<<<< HEAD
-}
-=======
     background-color: #e9ecef;
 }
 
@@ -141,4 +98,3 @@
         font-size: 1.1rem;
     }
 }
->>>>>>> f2a86fb (page see pet, bug fix database)
