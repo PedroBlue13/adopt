@@ -15,8 +15,15 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 bg-side-plataforma sidebar">
-                <h2>ADO.TE</h2>
-                <hr>
+                <h2 style="color: aliceblue;">ADO.TE</h2>
+                <hr style="color: aliceblue;">
+                <nav class="nav flex-column">
+                    <a href="{% url 'listar_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Listar Pets</a>
+                    <a href="{% url 'novo_pet' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Anunciar pet</a>
+                    <a href="{% url 'seus_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Seus Pets</a>
+                    <a href="{% url 'ver_pedido_adocao' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Solicitações de adoção</a>
+                    <a href="{% url 'dashboard' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Estatisticas</a>                 
+                </nav>
             </div>
             <div style="padding:60px" class="col-md">
                 <div class="row">
