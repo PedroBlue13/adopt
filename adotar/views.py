@@ -65,7 +65,7 @@ def processa_pedido_adocao(request, id_pedido):
     email = send_mail(
         'Sua adoção foi processada',
         string,
-        'caio@pythonando.com.br',
+        'email@teste.com.br',
         [pedido.usuario.email,],
     )
     messages.add_message(request, constants.SUCCESS, 'Pedido de adoção processado com sucesso')
