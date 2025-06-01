@@ -4,60 +4,749 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
+    <title>Solicitações de Adoção - ADO.TE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e84393;
+            --dark-color: #2d3436;
+            --light-color: #ddd;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --success-gradient: linear-gradient(135deg, var(--success-color), #55efc4);
+            --danger-gradient: linear-gradient(135deg, var(--danger-color), #fd79a8);
+            --shadow: 0 10px 30px rgba(108, 92, 231, 0.15);
+            --shadow-hover: 0 15px 40px rgba(108, 92, 231, 0.25);
+            --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        .sidebar {
+            background: var(--gradient);
+            min-height: 100vh;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            z-index: 1000;
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h2 {
+            color: var(--white);
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar hr {
+            border: none;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar .nav-link {
+            color: var(--white) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            margin: 0.8rem 0;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0;
+        }
+
+        .page-title h3 {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .page-title i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .requests-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(108, 92, 231, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .request-card {
+            background: var(--white);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .request-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+
+        .request-header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .request-header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid var(--primary-color);
+        }
+
+        .pet-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .pet-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pet-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .request-card:hover .pet-image img {
+            transform: scale(1.05);
+        }
+
+        .urgent-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--danger-gradient);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .request-info {
+            padding: 2rem;
+        }
+
+        .adopter-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .adopter-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .adopter-name i {
+            color: var(--accent-color);
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-value {
+            color: var(--dark-color);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .request-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-approve {
+            background: var(--success-gradient);
+            color: var(--white);
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #55efc4, var(--success-color));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .btn-reject {
+            background: var(--danger-gradient);
+            color: var(--white);
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .btn-reject:hover {
+            background: linear-gradient(135deg, #fd79a8, var(--danger-color));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(232, 67, 147, 0.3);
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .alert {
+            border-radius: 15px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .alert-success {
+            background: var(--success-gradient);
+            color: var(--white);
+        }
+
+        .alert-danger {
+            background: var(--danger-gradient);
+            color: var(--white);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, var(--warning-color), #ffeaa7);
+            color: var(--dark-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 20px 20px 0 0;
+            border: none;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-footer {
+            border: none;
+            padding: 1.5rem;
+        }
+
+        .modal-footer .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+                text-align: center;
+                flex-direction: column;
+            }
+
+            .requests-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-row {
+                grid-template-columns: 1fr;
+            }
+
+            .request-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.08;
+            font-size: 2rem;
+            color: var(--white);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 25%; right: 15%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 4s; }
+        .floating-element:nth-child(4) { bottom: 30%; right: 10%; animation-delay: 1s; }
+        .floating-element:nth-child(5) { top: 50%; left: 50%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(8deg); }
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 bg-side-plataforma sidebar">
-                <h2 style="color: aliceblue;">ADO.TE</h2>
-                <hr style="color: aliceblue;">
-                <nav class="nav flex-column">
-                    <a href="{% url 'listar_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Listar Pets</a>
-                    <a href="{% url 'novo_pet' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Anunciar pet</a>
-                    <a href="{% url 'seus_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Seus Pets</a>
-                    <a href="{% url 'ver_pedido_adocao' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Solicitações de adoção</a>
-                    <a href="{% url 'dashboard' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Estatisticas</a>                 
-                </nav>
+    <div class="floating-elements">
+        <i class="floating-element fas fa-heart"></i>
+        <i class="floating-element fas fa-hand-holding-heart"></i>
+        <i class="floating-element fas fa-paw"></i>
+        <i class="floating-element fas fa-home"></i>
+        <i class="floating-element fas fa-star"></i>
+    </div>
+
+    <div class="sidebar">
+        <h2><i class="fas fa-heart"></i> ADO.TE</h2>
+        <hr>
+        <nav class="nav flex-column">
+            <a href="{% url 'listar_pets' %}" class="nav-link">
+                <i class="fas fa-list"></i>
+                Listar Pets
+            </a>
+            <a href="{% url 'novo_pet' %}" class="nav-link">
+                <i class="fas fa-plus-circle"></i>
+                Anunciar Pet
+            </a>
+            <a href="{% url 'seus_pets' %}" class="nav-link">
+                <i class="fas fa-paw"></i>
+                Seus Pets
+            </a>
+            <a href="{% url 'ver_pedido_adocao' %}" class="nav-link">
+                <i class="fas fa-hand-holding-heart"></i>
+                Solicitações de Adoção
+            </a>
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                Estatísticas
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="content-wrapper">
+            <!-- Cabeçalho da Página -->
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h3>Solicitações de Adoção</h3>
+                </div>
+                <div class="requests-stats">
+                    <i class="fas fa-inbox"></i>
+                    <span>{{ pedidos|length }} solicitaç{{ pedidos|length|pluralize:"ão,ões" }} pendente{{ pedidos|length|pluralize:"s" }}</span>
+                </div>
             </div>
-            <div style="padding:60px" class="col-md">
-                <div class="row">
-                    {% if messages %}
-                        <br>
-                        {% for message in messages %}
-                            <div class="alert {{message.tags}}">
-                                {{message}}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+
+            <!-- Exibição de mensagens -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <i class="fas fa-info-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if pedidos %}
+                <div class="requests-grid">
                     {% for pedido in pedidos %}
-                        <div class="col-md-3" style="margin-top: 20px;">
-                            <div class="card" style="background-color: #D6D6D6; border:none;">
-                                <div style="padding:10px">
-                                    <span class="span-bold">{{pedido.pet.nome}}</span>
+                        <div class="request-card">
+                            <div class="request-header">
+                                <h4 class="pet-name">
+                                    <i class="fas fa-paw"></i>
+                                    {{ pedido.pet.nome }}
+                                </h4>
+                            </div>
+                            
+                            <div class="pet-image">
+                                <img src="{{ pedido.pet.foto.url }}" alt="Foto de {{ pedido.pet.nome }}">
+                                <div class="urgent-badge">
+                                    <i class="fas fa-clock"></i>
+                                    Aguardando
                                 </div>
-                                <img class="card-img-top" src="{{pedido.pet.foto.url}}">
-                                <div class="card-body">
-                                    <h1 class="card-title">{{pedido.usuario.username}}</h1>
-                                    <span class="span-bold2">Telefone:</span>
-                                    <p>{{pedido.pet.telefone}}</p>
-                                    <span class="span-bold2">Cidade:</span>
-                                    <p>{{pedido.pet.bairro}}</p>
-                                    <a href="{% url 'processa_pedido_adocao' pedido.id %}?status=A" class="btn btn-success btn-lg">Aprovar</a>
-                                    <a href="{% url 'processa_pedido_adocao' pedido.id %}?status=B" class="btn btn-danger btn-lg">Recusar</a>
+                            </div>
+                            
+                            <div class="request-info">
+                                <div class="adopter-info">
+                                    <div class="adopter-name">
+                                        <i class="fas fa-user"></i>
+                                        {{ pedido.usuario.username }}
+                                    </div>
+                                    
+                                    <div class="info-row">
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="fas fa-phone"></i>
+                                                Telefone
+                                            </div>
+                                            <div class="info-value">{{ pedido.pet.telefone }}</div>
+                                        </div>
+                                        
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                Localização
+                                            </div>
+                                            <div class="info-value">{{ pedido.pet.bairro }}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="info-row">
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                Data do Pedido
+                                            </div>
+                                            <div class="info-value">{{ pedido.data_pedido|date:"d/m/Y" }}</div>
+                                        </div>
+                                        
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="fas fa-envelope"></i>
+                                                E-mail
+                                            </div>
+                                            <div class="info-value">{{ pedido.usuario.email|default:"Não informado" }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="request-actions">
+                                    <button class="btn-approve" onclick="confirmAction('approve', '{{ pedido.pet.nome }}', '{{ pedido.usuario.username }}', '{% url 'processa_pedido_adocao' pedido.id %}?status=A')">
+                                        <i class="fas fa-check"></i>
+                                        Aprovar
+                                    </button>
+                                    
+                                    <button class="btn-reject" onclick="confirmAction('reject', '{{ pedido.pet.nome }}', '{{ pedido.usuario.username }}', '{% url 'processa_pedido_adocao' pedido.id %}?status=B')">
+                                        <i class="fas fa-times"></i>
+                                        Recusar
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h4>Nenhuma solicitação pendente</h4>
+                    <p>Você não possui solicitações de adoção aguardando aprovação no momento.</p>
+                    <p class="text-muted">Quando alguém se interessar pelos seus pets, as solicitações aparecerão aqui.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">
+                        <i class="fas fa-question-circle"></i>
+                        Confirmar Ação
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar
+                    </button>
+                    <a href="#" id="confirmActionBtn" class="btn">
+                        <i id="confirmIcon" class="fas fa-check me-2"></i>
+                        <span id="confirmText">Confirmar</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para confirmar ações
+        function confirmAction(action, petName, userName, actionUrl) {
+            const modal = document.getElementById('confirmModal');
+            const modalContent = document.getElementById('modalContent');
+            const confirmBtn = document.getElementById('confirmActionBtn');
+            const confirmIcon = document.getElementById('confirmIcon');
+            const confirmText = document.getElementById('confirmText');
+            
+            if (action === 'approve') {
+                modalContent.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h5>Aprovar Adoção</h5>
+                        <p>Tem certeza que deseja <strong>aprovar</strong> a adoção de <strong>${petName}</strong> para <strong>${userName}</strong>?</p>
+                        <div class="alert alert-success">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Esta ação irá conectar o adotante com você para finalizar o processo.
+                        </div>
+                    </div>
+                `;
+                confirmBtn.className = 'btn btn-success';
+                confirmIcon.className = 'fas fa-check me-2';
+                confirmText.textContent = 'Sim, Aprovar';
+            } else {
+                modalContent.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-times-circle text-danger" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h5>Recusar Adoção</h5>
+                        <p>Tem certeza que deseja <strong>recusar</strong> a solicitação de adoção de <strong>${petName}</strong> por <strong>${userName}</strong>?</p>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            O usuário será notificado sobre a recusa.
+                        </div>
+                    </div>
+                `;
+                confirmBtn.className = 'btn btn-danger';
+                confirmIcon.className = 'fas fa-times me-2';
+                confirmText.textContent = 'Sim, Recusar';
+            }
+            
+            confirmBtn.href = actionUrl;
+            
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+        }
+
+        // Animação suave para alertas
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.animation = 'slideInDown 0.5s ease-out';
+                setTimeout(() => {
+                    alert.style.animation = 'fadeOut 0.5s ease-out forwards';
+                }, 5000);
+            });
+        });
+
+        // Adicionar keyframes para animações
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInDown {
+                from { transform: translateY(-100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            @keyframes fadeOut {
+                to { opacity: 0; transform: translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

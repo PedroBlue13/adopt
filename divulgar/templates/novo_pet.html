@@ -5,97 +5,621 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cadastro - ADO.TE</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e84393;
+            --dark-color: #2d3436;
+            --light-color: #ddd;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --shadow: 0 10px 30px rgba(108, 92, 231, 0.15);
+            --shadow-hover: 0 15px 40px rgba(108, 92, 231, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        .sidebar {
+            background: var(--gradient);
+            min-height: 100vh;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            z-index: 1000;
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h2 {
+            color: var(--white);
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar hr {
+            border: none;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar .nav-link {
+            color: var(--white) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            margin: 0.8rem 0;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+        }
+
+        .form-container:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .form-header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .form-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: var(--primary-color);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+            background: var(--white);
+            outline: none;
+        }
+
+        .custom-file-input {
+            position: relative;
+            margin-bottom: 1rem;
+            z-index: 1;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-display {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 1.2rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 3px dashed rgba(255, 255, 255, 0.5);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-input-display:hover {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .file-input-display i {
+            font-size: 2rem;
+        }
+
+        #foto {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .tags-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .form-check {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .form-check:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
+        }
+
+        .form-check-input:checked + .form-check-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-check-input:checked ~ .form-check {
+            background: rgba(108, 92, 231, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .btn-submit {
+            background: var(--gradient);
+            color: var(--white);
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .alert {
+            border-radius: 15px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, var(--success-color), #55efc4);
+            color: var(--white);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, var(--danger-color), #fd79a8);
+            color: var(--white);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, var(--warning-color), #ffeaa7);
+            color: var(--dark-color);
+        }
+
+        .row-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .tags-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .form-body {
+                padding: 1.5rem;
+            }
+
+            .form-layout {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .row-fields {
+                grid-template-columns: 1fr;
+            }
+
+            .tags-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 2rem;
+            color: var(--white);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { bottom: 15%; left: 20%; animation-delay: 4s; }
+        .floating-element:nth-child(4) { bottom: 25%; right: 10%; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 bg-side sidebar">
-                <h2 style="color: aliceblue;">ADO.TE</h2>
-                <hr style="color: aliceblue;">
-                <nav class="nav flex-column">
-                    <a href="{% url 'listar_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Listar Pets</a>
-                    <a href="{% url 'novo_pet' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Anunciar pet</a>
-                    <a href="{% url 'seus_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Seus Pets</a>
-                    <a href="{% url 'ver_pedido_adocao' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Solicitações de adoção</a>
-                    <a href="{% url 'dashboard' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Estatisticas</a>                 
-                </nav>
-            </div>
-            <div class="col-md">
-                <div class="wrapper">
-                    <div class="box">
-                        <div class="header-box">
-                            <h3 class="font-vinho">Quero divulgar</h3>
-                            <hr>
-                        </div>
-                        <div class="body-box">
-                            <form action="{% url 'novo_pet' %}" method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                
-                                <!-- Exibir mensagens -->
-                                {% if messages %}
-                                    <br>
-                                    {% for message in messages %}
-                                        <div class="alert {{ message.tags }}">
-                                            {{ message }}
+    <div class="floating-elements">
+        <i class="floating-element fas fa-paw"></i>
+        <i class="floating-element fas fa-heart"></i>
+        <i class="floating-element fas fa-cat"></i>
+        <i class="floating-element fas fa-dog"></i>
+    </div>
+
+    <div class="sidebar">
+        <h2><i class="fas fa-heart"></i> ADO.TE</h2>
+        <hr>
+        <nav class="nav flex-column">
+            <a href="{% url 'listar_pets' %}" class="nav-link">
+                <i class="fas fa-list"></i>
+                Listar Pets
+            </a>
+            <a href="{% url 'novo_pet' %}" class="nav-link">
+                <i class="fas fa-plus-circle"></i>
+                Anunciar Pet
+            </a>
+            <a href="{% url 'seus_pets' %}" class="nav-link">
+                <i class="fas fa-paw"></i>
+                Seus Pets
+            </a>
+            <a href="{% url 'ver_pedido_adocao' %}" class="nav-link">
+                <i class="fas fa-hand-holding-heart"></i>
+                Solicitações de Adoção
+            </a>
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                Estatísticas
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="wrapper">
+            <div class="form-container">
+                <div class="form-header">
+                    <h3>
+                        <i class="fas fa-bullhorn"></i>
+                        Quero Divulgar um Pet
+                    </h3>
+                </div>
+                
+                <div class="form-body">
+                    <form action="{% url 'novo_pet' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Exibir mensagens -->
+                        {% if messages %}
+                            <div class="full-width">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="form-layout">
+                            <!-- Coluna Esquerda -->
+                            <div class="form-left">
+                                <!-- Upload de Foto -->
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-camera"></i>
+                                        Foto do Pet
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <div class="file-input-display" id="file-display">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <span id="file-label">Clique para selecionar uma foto</span>
+                                            <small>JPG, PNG ou GIF (máx. 5MB)</small>
                                         </div>
-                                    {% endfor %}
-                                {% endif %}
-                                
-                                <div class="custom-file-input">
-                                    <label for="foto" id="file-label">Selecione uma foto do Gatinho...</label>
-                                    <input type="file" name="foto" id="foto" class="form-control" onchange="showFileName()" required>
-                                </div>
-                                <br>
-                                <label for="nome">Nome:</label>
-                                <input type="text" id="nome" class="form-control" name="nome" placeholder="Digite o nome do pet..." required>
-                                <br>
-                                <label for="descricao">Descrição:</label>
-                                <textarea id="descricao" class="form-control" name="descricao" placeholder="Descrição..." required></textarea>
-                                <br>
-                                
-                                <div class="row">
-                                    <div class="col-md">
-                                        <label for="Bairro">Bairro:</label>
-                                        <input type="text" id="Bairro" placeholder="Digite o Bairro do pet..." name="Bairro" class="form-control" required>
+                                        <input type="file" name="foto" id="foto" accept="image/*" required>
                                     </div>
                                 </div>
-                                <br>
                                 
-                                <label for="telefone">Telefone para contato:</label>
-                                <input type="text" id="telefone" placeholder="Digite o seu telefone..." name="telefone" class="form-control" required>
-                                <br>
-                             
-                                <label for="tags">Tags:</label>
-                              
-                                <div id="tags" class="form-check">
-                                    {% for tag in tags %}
-                                        <div class="form-check">
-                                            <input type="checkbox" id="tag_{{ tag.id }}" name="tags" value="{{ tag.id }}" class="form-check-input">
-                                            <label for="tag_{{ tag.id }}" class="form-check-label">{{ tag }}</label>
-                                        </div>
-                                    {% endfor %}
+                                <!-- Nome -->
+                                <div class="form-group">
+                                    <label for="nome" class="form-label">
+                                        <i class="fas fa-tag"></i>
+                                        Nome do Pet
+                                    </label>
+                                    <input type="text" id="nome" class="form-control" name="nome" placeholder="Digite o nome do pet..." required>
                                 </div>
-                                <br>
                                 
-                                <label for="raca">Raça:</label>
-                                <select id="raca" name="raca"  class="form-select" required>
-                                    {% for raca in racas %}
-                                  <option value="{{raca.id}}">{{raca}}</option>  
-                                    {%endfor%}
-                                </select>
-                                <br>
+                                <!-- Raça -->
+                                <div class="form-group">
+                                    <label for="raca" class="form-label">
+                                        <i class="fas fa-dna"></i>
+                                        Raça
+                                    </label>
+                                    <select id="raca" name="raca" class="form-select" required>
+                                        <option value="">Selecione a raça...</option>
+                                        {% for raca in racas %}
+                                            <option value="{{ raca.id }}">{{ raca }}</option>  
+                                        {% endfor %}
+                                    </select>
+                                </div>
                                 
-                                <input type="submit" value="ENVIAR" class="btn-custom-primary">
-                            </form>
+                                <!-- Localização e Contato -->
+                                <div class="row-fields">
+                                    <div class="form-group">
+                                        <label for="Bairro" class="form-label">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            Bairro
+                                        </label>
+                                        <input type="text" id="Bairro" placeholder="Digite o bairro..." name="Bairro" class="form-control" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="telefone" class="form-label">
+                                            <i class="fas fa-phone"></i>
+                                            Telefone
+                                        </label>
+                                        <input type="tel" id="telefone" placeholder="(XX) XXXXX-XXXX" name="telefone" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Coluna Direita -->
+                            <div class="form-right">
+                                <!-- Descrição -->
+                                <div class="form-group">
+                                    <label for="descricao" class="form-label">
+                                        <i class="fas fa-align-left"></i>
+                                        Descrição
+                                    </label>
+                                    <textarea id="descricao" class="form-control" name="descricao" placeholder="Conte sobre a personalidade, cuidados especiais, histórico do pet..." rows="8" required></textarea>
+                                </div>
+                                
+                                <!-- Tags -->
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-tags"></i>
+                                        Características do Pet
+                                    </label>
+                                    <div class="tags-grid">
+                                        {% for tag in tags %}
+                                            <div class="form-check">
+                                                <input type="checkbox" id="tag_{{ tag.id }}" name="tags" value="{{ tag.id }}" class="form-check-input">
+                                                <label for="tag_{{ tag.id }}" class="form-check-label">{{ tag }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <!-- Botão de Envio -->
+                        <div class="full-width">
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Divulgar Pet para Adoção
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para mostrar nome do arquivo selecionado
+        document.getElementById('foto').addEventListener('change', function(e) {
+            const fileLabel = document.getElementById('file-label');
+            const fileDisplay = document.getElementById('file-display');
+            
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                fileLabel.textContent = `Arquivo selecionado: ${fileName}`;
+                fileDisplay.style.background = 'linear-gradient(135deg, #00b894, #55efc4)';
+                fileDisplay.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                fileLabel.textContent = 'Clique para selecionar uma foto do gatinho...';
+                fileDisplay.style.background = 'var(--gradient)';
+                fileDisplay.querySelector('i').className = 'fas fa-cloud-upload-alt';
+            }
+        });
+
+        // Máscara para telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 11) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length >= 6) {
+                value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+            } else if (value.length >= 2) {
+                value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+            }
+            e.target.value = value;
+        });
+
+        // Animação suave para alertas
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.animation = 'slideInDown 0.5s ease-out';
+                setTimeout(() => {
+                    alert.style.animation = 'fadeOut 0.5s ease-out forwards';
+                }, 5000);
+            });
+        });
+
+        // Adicionar keyframes para animações
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInDown {
+                from { transform: translateY(-100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            @keyframes fadeOut {
+                to { opacity: 0; transform: translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

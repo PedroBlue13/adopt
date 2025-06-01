@@ -4,61 +4,571 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro - ADO.TE</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
+    <title>Login - ADO.TE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e84393;
+            --dark-color: #2d3436;
+            --light-color: #f8f9fa;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-reverse: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            --shadow: 0 15px 35px rgba(108, 92, 231, 0.1);
+            --shadow-hover: 0 20px 40px rgba(108, 92, 231, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-color);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem;
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow-hover);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+            position: relative;
+        }
+
+        .login-form-section {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: var(--white);
+        }
+
+        .login-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .login-brand img {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.2);
+        }
+
+        .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-location {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .welcome-section h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-section h2 i {
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .form-divider {
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            width: 60px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .form-label i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--light-color);
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+            background: var(--white);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+            font-weight: 400;
+        }
+
+        .btn-login {
+            background: var(--gradient);
+            color: var(--white);
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 1.5rem 0;
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(108, 92, 231, 0.4);
+            background: var(--gradient-reverse);
+        }
+
+        .btn-login:active {
+            transform: translateY(-1px);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 2rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .register-link a:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .hero-section {
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            background: var(--white);
+            padding: 1rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .feature-item i {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .feature-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .alert {
+            border-radius: 15px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, var(--success-color), #55efc4);
+            color: var(--white);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, var(--danger-color), #fd79a8);
+            color: var(--white);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, var(--warning-color), #ffeaa7);
+            color: var(--dark-color);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 3rem;
+            color: var(--white);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 25%; right: 20%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 4s; }
+        .floating-element:nth-child(4) { bottom: 35%; right: 15%; animation-delay: 1s; }
+        .floating-element:nth-child(5) { top: 60%; left: 50%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-3deg); }
+        }
+
+        @keyframes slideInDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                margin: 1rem;
+                min-height: auto;
+            }
+
+            .hero-section {
+                order: -1;
+                min-height: 300px;
+            }
+
+            .login-form-section {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-features {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .welcome-section h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .login-form-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-5 bg-side">
-                <div class="header">
-                    <img src="{% static 'usuarios/img/logo2.png' %}"  width="12%" alt="Logo ADO.TE">
-                    <span class="font-logo">ADO.TE <strong>CURITIBA</strong></span>
-                </div>
-                <div class="body-form">
-                    <!-- Exibir mensagens de erro ou sucesso -->
-                    {% if messages %}
-                        <br>
-                        {% for message in messages %}
-                            <div class="alert {{ message.tags }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    
-                    <h2>Logar</h2>
-                    <p>Que bom ter você de volta.</p>
-                    <hr>
-                    
-                    <!-- Formulário de login -->
-                    <form action="{% url 'login' %}" method="POST">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome:</label>
-                            <input type="text" id="nome" class="form-control" placeholder="Digite seu nome..." name="nome" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="senha" class="form-label">Senha:</label>
-                            <input type="password" id="senha" class="form-control" placeholder="Digite sua senha..." name="senha" required>
-                        </div>
-                        
-                        <input type="submit" value="SALVAR" class="btn-custom-primary">
-                        <a href="{% url 'cadastro' %}" class="link-float">Cadastre-se</a>
-                    </form>
+    <div class="login-container">
+        <!-- Seção do Formulário -->
+        <div class="login-form-section">
+            <!-- Cabeçalho da Marca -->
+            <div class="login-brand">
+                <img src="{% static 'usuarios/img/logo2.png' %}" alt="Logo ADO.TE">
+                <div>
+                    <div class="brand-text">ADO.TE</div>
+                    <div class="brand-location">Curitiba</div>
                 </div>
             </div>
-            
-            <div class="col-md-7">
-                <div class="side-logo">
-                    <img class="logo-margin-top" src="{% static 'usuarios/img/logo2.png' %}"  width="20%" alt="Logo ADO.TE">
-                    <h1>ADO.TE</h1>
-                    <p>Nos <strong>ajude</strong> a encontrar um <strong>lar</strong>.</p>
+
+            <!-- Seção de Boas-vindas -->
+            <div class="welcome-section">
+                <h2>
+                    <i class="fas fa-sign-in-alt"></i>
+                    Bem-vindo de volta!
+                </h2>
+                <p>Que bom ter você de volta. Faça login para continuar sua jornada de amor pelos pets.</p>
+                <div class="form-divider"></div>
+            </div>
+
+            <!-- Exibir mensagens de erro ou sucesso -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <i class="fas fa-info-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Formulário de login -->
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="nome" class="form-label">
+                        <i class="fas fa-user"></i>
+                        Nome de usuário
+                    </label>
+                    <input type="text" id="nome" class="form-control" placeholder="Digite seu nome de usuário..." name="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Senha
+                    </label>
+                    <input type="password" id="senha" class="form-control" placeholder="Digite sua senha..." name="senha" required>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+
+            <!-- Link para cadastro -->
+            <div class="register-link">
+                <a href="{% url 'cadastro' %}">
+                    <i class="fas fa-user-plus"></i>
+                    Criar nova conta
+                </a>
+            </div>
+        </div>
+
+        <!-- Seção Hero -->
+        <div class="hero-section">
+            <div class="floating-elements">
+                <i class="floating-element fas fa-heart"></i>
+                <i class="floating-element fas fa-paw"></i>
+                <i class="floating-element fas fa-home"></i>
+                <i class="floating-element fas fa-star"></i>
+                <i class="floating-element fas fa-bone"></i>
+            </div>
+
+            <div class="hero-content">
+                <img class="hero-logo" src="{% static 'usuarios/img/logo2.png' %}" alt="Logo ADO.TE">
+                <h1 class="hero-title">ADO.TE</h1>
+                <p class="hero-subtitle">Nos <strong>ajude</strong> a encontrar um <strong>lar</strong> para cada pet que precisa de amor.</p>
+                
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <i class="fas fa-search"></i>
+                        <h4>Encontre Pets</h4>
+                        <p>Descubra o companheiro perfeito para sua família</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-bullhorn"></i>
+                        <h4>Anuncie Pets</h4>
+                        <p>Ajude pets a encontrarem novos lares</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h4>Adoção Responsável</h4>
+                        <p>Promovemos adoções conscientes e seguras</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-users"></i>
+                        <h4>Comunidade</h4>
+                        <p>Conecte-se com outros amantes de animais</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animação suave para alertas
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.animation = 'fadeOut 0.5s ease-out forwards';
+                }, 4000);
+            });
+
+            // Adicionar keyframes para fadeOut
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeOut {
+                    to { opacity: 0; transform: translateY(-20px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Efeito de focus avançado nos inputs
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.3s ease';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Animação do botão de login
+        document.querySelector('.btn-login').addEventListener('click', function(e) {
+            const button = this;
+            button.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                button.style.transform = '';
+            }, 150);
+        });
+    </script>
 </body>
 </html>

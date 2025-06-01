@@ -4,44 +4,623 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
+    <title>Dashboard - ADO.TE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e84393;
+            --info-color: #74b9ff;
+            --dark-color: #2d3436;
+            --light-color: #ddd;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --success-gradient: linear-gradient(135deg, var(--success-color), #55efc4);
+            --warning-gradient: linear-gradient(135deg, var(--warning-color), #ffeaa7);
+            --info-gradient: linear-gradient(135deg, var(--info-color), #81ecec);
+            --shadow: 0 10px 30px rgba(108, 92, 231, 0.15);
+            --shadow-hover: 0 15px 40px rgba(108, 92, 231, 0.25);
+            --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        .sidebar {
+            background: var(--gradient);
+            min-height: 100vh;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            z-index: 1000;
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h2 {
+            color: var(--white);
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar hr {
+            border: none;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar .nav-link {
+            color: var(--white) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            margin: 0.8rem 0;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0;
+        }
+
+        .page-title h3 {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .page-title i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .page-subtitle {
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        .stat-icon.pets { background: var(--gradient); }
+        .stat-icon.adoptions { background: var(--success-gradient); }
+        .stat-icon.requests { background: var(--warning-gradient); }
+        .stat-icon.users { background: var(--info-gradient); }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-color);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .chart-container {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .chart-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .chart-title i {
+            color: var(--primary-color);
+        }
+
+        .chart-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 1.5rem;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            color: #666;
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .quick-actions {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .quick-actions-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .action-btn {
+            background: var(--gradient);
+            color: var(--white);
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 600;
+            box-shadow: var(--card-shadow);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .action-btn i {
+            font-size: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                padding: 1.5rem;
+            }
+
+            .chart-wrapper {
+                height: 300px;
+            }
+
+            .chart-legend {
+                gap: 1rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.06;
+            font-size: 2rem;
+            color: var(--white);
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 20%; animation-delay: 3s; }
+        .floating-element:nth-child(3) { bottom: 25%; left: 25%; animation-delay: 6s; }
+        .floating-element:nth-child(4) { bottom: 35%; right: 15%; animation-delay: 2s; }
+        .floating-element:nth-child(5) { top: 60%; left: 60%; animation-delay: 4s; }
+        .floating-element:nth-child(6) { top: 30%; left: 80%; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-3deg); }
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 bg-side sidebar">
-                <h2 style="color: aliceblue;">ADO.TE</h2>
-                <hr style="color: aliceblue;">
-                <nav class="nav flex-column">
-                    <a href="{% url 'listar_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Listar Pets</a>
-                    <a href="{% url 'novo_pet' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Anunciar pet</a>
-                    <a href="{% url 'seus_pets' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Seus Pets</a>
-                    <a href="{% url 'ver_pedido_adocao' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Solicitações de adoção</a>
-                    <a href="{% url 'dashboard' %}" class="nav-link btn btn-outline-primary my-2" style="color: white; border: 1px solid white;">Estatisticas</a>                 
-                </nav>
+    <div class="floating-elements">
+        <i class="floating-element fas fa-chart-line"></i>
+        <i class="floating-element fas fa-chart-bar"></i>
+        <i class="floating-element fas fa-chart-pie"></i>
+        <i class="floating-element fas fa-paw"></i>
+        <i class="floating-element fas fa-heart"></i>
+        <i class="floating-element fas fa-home"></i>
+    </div>
+
+    <div class="sidebar">
+        <h2><i class="fas fa-heart"></i> ADO.TE</h2>
+        <hr>
+        <nav class="nav flex-column">
+            <a href="{% url 'listar_pets' %}" class="nav-link">
+                <i class="fas fa-list"></i>
+                Listar Pets
+            </a>
+            <a href="{% url 'novo_pet' %}" class="nav-link">
+                <i class="fas fa-plus-circle"></i>
+                Anunciar Pet
+            </a>
+            <a href="{% url 'seus_pets' %}" class="nav-link">
+                <i class="fas fa-paw"></i>
+                Seus Pets
+            </a>
+            <a href="{% url 'ver_pedido_adocao' %}" class="nav-link">
+                <i class="fas fa-hand-holding-heart"></i>
+                Solicitações de Adoção
+            </a>
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                Estatísticas
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="content-wrapper">
+            <!-- Cabeçalho da Página -->
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Dashboard de Estatísticas</h3>
+                </div>
+                <p class="page-subtitle">Acompanhe o impacto da sua contribuição para a adoção responsável de pets</p>
             </div>
-            <div style="padding:60px" class="col-md">
-                <h3 class="font-vinho">Quantidade de adoções por raça.</h3>
-                <div style="width: 100%;">
-                    <canvas id="myChart"></canvas>
+
+            <!-- Cards de Estatísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon pets">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div class="stat-number" id="totalPets">-</div>
+                    <div class="stat-label">Pets Cadastrados</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon adoptions">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="stat-number" id="totalAdoptions">-</div>
+                    <div class="stat-label">Pets Adotados</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon requests">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <div class="stat-number" id="totalRequests">-</div>
+                    <div class="stat-label">Solicitações Ativas</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon users">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="totalUsers">-</div>
+                    <div class="stat-label">Usuários Ativos</div>
                 </div>
             </div>
-            <div style="padding:60px" class="col-md">
-                <h3 class="font-vinho">Quantidade de adoções solicitadas.</h3>
-                <div style="width: 100%;">
-                    <canvas id="myChart1"></canvas>
+
+            <!-- Seção de Gráficos -->
+            <div class="charts-section">
+                <!-- Gráfico 1: Adoções por Raça -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-line"></i>
+                            Adoções por Raça
+                        </div>
+                        <div class="chart-subtitle">Distribuição das adoções realizadas por tipo de raça</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="loading-state" id="loading1">
+                            <i class="fas fa-spinner"></i>
+                            <span>Carregando dados...</span>
+                        </div>
+                        <canvas id="myChart" style="display: none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 2: Solicitações de Adoção -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Solicitações de Adoção
+                        </div>
+                        <div class="chart-subtitle">Volume de solicitações recebidas por período</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="loading-state" id="loading2">
+                            <i class="fas fa-spinner"></i>
+                            <span>Carregando dados...</span>
+                        </div>
+                        <canvas id="myChart1" style="display: none;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="quick-actions">
+                <div class="quick-actions-header">
+                    <div class="quick-actions-title">
+                        <i class="fas fa-bolt"></i>
+                        Ações Rápidas
+                    </div>
+                    <p class="chart-subtitle">Acesse rapidamente as principais funcionalidades</p>
+                </div>
+                
+                <div class="actions-grid">
+                    <a href="{% url 'novo_pet' %}" class="action-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Anunciar Pet</span>
+                    </a>
+                    
+                    <a href="{% url 'listar_pets' %}" class="action-btn">
+                        <i class="fas fa-search"></i>
+                        <span>Buscar Pets</span>
+                    </a>
+                    
+                    <a href="{% url 'seus_pets' %}" class="action-btn">
+                        <i class="fas fa-paw"></i>
+                        <span>Meus Pets</span>
+                    </a>
+                    
+                    <a href="{% url 'ver_pedido_adocao' %}" class="action-btn">
+                        <i class="fas fa-inbox"></i>
+                        <span>Solicitações</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Configurações globais dos gráficos
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.font.size = 12;
+        Chart.defaults.color = '#2d3436';
+
+        // Função para animar números
+        function animateNumber(element, finalNumber, duration = 2000) {
+            const startNumber = 0;
+            const increment = finalNumber / (duration / 16);
+            let currentNumber = startNumber;
+            
+            const timer = setInterval(() => {
+                currentNumber += increment;
+                if (currentNumber >= finalNumber) {
+                    currentNumber = finalNumber;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentNumber);
+            }, 16);
+        }
+
         // Primeiro gráfico: Quantidade de adoções por raça
         fetch("/divulgar/api_adocoes_por_raca/", {
             method: 'GET',
@@ -50,21 +629,86 @@
             return result.json();
         })
         .then(function(data_adocoes) {
+            // Esconder loading e mostrar gráfico
+            document.getElementById('loading1').style.display = 'none';
+            document.getElementById('myChart').style.display = 'block';
+            
+            const ctx = document.getElementById('myChart').getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(108, 92, 231, 0.8)');
+            gradient.addColorStop(1, 'rgba(162, 155, 254, 0.2)');
+
             const data = {
                 labels: data_adocoes['labels'],
                 datasets: [{
                     label: 'Adoções por Raça',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: gradient,
+                    borderColor: '#6c5ce7',
+                    borderWidth: 3,
                     data: data_adocoes['qtd_adocoes'],
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#6c5ce7',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
                 }]
             };
+
             const config = {
                 type: 'line',
                 data: data,
-                options: {}
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(45, 52, 54, 0.9)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            cornerRadius: 10,
+                            displayColors: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                            },
+                            ticks: {
+                                color: '#666',
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                            },
+                            ticks: {
+                                color: '#666',
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
             };
-            new Chart(document.getElementById('myChart'), config);
+
+            new Chart(ctx, config);
+            
+            // Animar estatística
+            const totalAdoptions = data_adocoes['qtd_adocoes'].reduce((a, b) => a + b, 0);
+            animateNumber(document.getElementById('totalAdoptions'), totalAdoptions);
+        })
+        .catch(function(error) {
+            document.getElementById('loading1').innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #e84393;"></i><span>Erro ao carregar dados</span>';
         });
 
         // Segundo gráfico: Quantidade de adoções solicitadas
@@ -75,23 +719,97 @@
             return result.json();
         })
         .then(function(data_solicitadas) {
+            // Esconder loading e mostrar gráfico
+            document.getElementById('loading2').style.display = 'none';
+            document.getElementById('myChart1').style.display = 'block';
+            
+            const ctx = document.getElementById('myChart1').getContext('2d');
+
             const data = {
                 labels: data_solicitadas['labels'],
                 datasets: [{
-                    label: 'Adoções Solicitadas',
-                    backgroundColor: 'rgb(75, 192, 192)',
-                    borderColor: 'rgb(75, 192, 192)',
+                    label: 'Solicitações de Adoção',
+                    backgroundColor: [
+                        'rgba(0, 184, 148, 0.8)',
+                        'rgba(255, 107, 107, 0.8)',
+                        'rgba(116, 185, 255, 0.8)',
+                        'rgba(253, 203, 110, 0.8)',
+                        'rgba(162, 155, 254, 0.8)',
+                    ],
+                    borderColor: [
+                        '#00b894',
+                        '#ff6b6b',
+                        '#74b9ff',
+                        '#fdcb6e',
+                        '#a29bfe',
+                    ],
+                    borderWidth: 2,
                     data: data_solicitadas['qtd_solicitadas'],
+                    borderRadius: 8,
+                    borderSkipped: false,
                 }]
             };
+
             const config = {
                 type: 'bar',
                 data: data,
-                options: {}
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(45, 52, 54, 0.9)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            cornerRadius: 10,
+                            displayColors: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                            },
+                            ticks: {
+                                color: '#666',
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                            },
+                            ticks: {
+                                color: '#666',
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
             };
-            new Chart(document.getElementById('myChart1'), config);
+
+            new Chart(ctx, config);
+            
+            // Animar estatística
+            const totalRequests = data_solicitadas['qtd_solicitadas'].reduce((a, b) => a + b, 0);
+            animateNumber(document.getElementById('totalRequests'), totalRequests);
+        })
+        .catch(function(error) {
+            document.getElementById('loading2').innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #e84393;"></i><span>Erro ao carregar dados</span>';
+        });
+
+        // Animar outras estatísticas (simuladas)
+        document.addEventListener('DOMContentLoaded', function() {
+            animateNumber(document.getElementById('totalPets'), 150, 1500);
+            animateNumber(document.getElementById('totalUsers'), 89, 1800);
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
